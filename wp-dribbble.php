@@ -11,7 +11,7 @@ Author URI: http://daverupert.com/
 Copyright 2010  Dave Rupert  (email : dave@paravelinc.com)
 
 This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License, version 2, as 
+it under the terms of the GNU General Public License, version 2, as
 published by the Free Software Foundation.
 
 This program is distributed in the hope that it will be useful,
@@ -24,18 +24,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-function wpDribbble() { 
+function wpDribbble() {
 	include_once(ABSPATH . WPINC . '/feed.php');
- 
+
   	$options = get_option("widget_wpDribbble");
 	$playerName = $options['playerName'];
 	$widgetTitle = $options['widgetTitle'];
 
 	if(function_exists('fetch_feed')):
-		$rss = fetch_feed("http://dribbble.com/players/$playerName/shots.rss");
+		$rss = fetch_feed("https://dribbble.com/$playerName/shots.rss");
 		add_filter( 'wp_feed_cache_transient_lifetime', create_function( '$a', 'return 1800;' ) );
-		if (!is_wp_error( $rss ) ) : 
-			$items = $rss->get_items(0, $rss->get_item_quantity($options['maxItems'])); 
+		if (!is_wp_error( $rss ) ) :
+			$items = $rss->get_items(0, $rss->get_item_quantity($options['maxItems']));
 		endif;
 	endif;
 
@@ -44,7 +44,7 @@ function wpDribbble() {
 	<h3><?php if(!empty($widgetTitle)) : echo $widgetTitle; else : echo 'Dribbbles'; endif; ?></h3>
 
 	<ol class="dribbbles">
-	<?php	
+	<?php
 	foreach ( $items as $item ):
 	$title = $item->get_title();
 	$link = $item->get_permalink();
@@ -57,18 +57,18 @@ function wpDribbble() {
 		$image = preg_replace('/.(jpg|jpeg|gif|png)/', '_teaser.$1',$image); #comment this out if you want to use the big 400x300 image
 	}?>
 
-	<li class="group"> 
-	<div class="dribbble"> 
-		<div class="dribbble-shot"> 
-			<div class="dribbble-img"> 
-				<a href="<?php echo $link; ?>" class="dribbble-link"><img src="<?php echo $image; ?>" alt="<?php echo $title;?>"/></a> 
-				<a href="<?php echo $link; ?>" class="dribbble-over"><strong><?php echo $title; ?></strong> 
+	<li class="group">
+	<div class="dribbble">
+		<div class="dribbble-shot">
+			<div class="dribbble-img">
+				<a href="<?php echo $link; ?>" class="dribbble-link"><img src="<?php echo $image; ?>" alt="<?php echo $title;?>"/></a>
+				<a href="<?php echo $link; ?>" class="dribbble-over"><strong><?php echo $title; ?></strong>
 					<span class="dim"><?php echo $options['playerName'] ?></span>
-					<em><?php echo $date; ?></em> 
+					<em><?php echo $date; ?></em>
 				</a>
 			</div>
 		</div>
-	</div> 
+	</div>
  	</li>
 <?php endforeach;?>
 </ol>
@@ -109,26 +109,26 @@ function wpDribbble_control() {
   	'bigImage' => false
     );
   }
-  
+
   if ($_POST['wpDribbble-Submit']) {
   	//player name
     $options['playerName'] = htmlspecialchars($_POST['wpDribbble-WidgetPlayerName']);
-    
+
     //widget Title
     $options['widgetTitle'] = htmlspecialchars($_POST['wpDribbble-WidgetTitle']);
-    
+
     //maximum number of shots
     $options['maxItems'] = htmlspecialchars($_POST['wpDribbble-WidgetMaxItems']);
-    
+
     //include CSS option
     $options['includeCSS'] = htmlspecialchars($_POST['wpDribbble-WidgetIncludeCSS']);
-    
+
     // drop shadow option
     $options['dropShadow'] = htmlspecialchars($_POST['wpDribbble-WidgetDropShadow']);
-    
+
     // big image option
     $options['bigImage'] = htmlspecialchars($_POST['wpDribbble-WidgetBigImage']);
-    
+
     //updateoption
     update_option("widget_wpDribbble", $options);
   }
@@ -189,7 +189,7 @@ function widget_wpDribbble($args) {
 	wpDribbble();
 	echo $after_widget;
 }
-  
+
 function wpDribbble_init() {
 	$options = get_option("widget_wpDribbble");
 	wp_register_sidebar_widget(__('Dribbble'),__('Dribbble'), 'widget_wpDribbble' ,array('description' => 'Pull in your latest Dribbble shots'));
